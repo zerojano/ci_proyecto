@@ -1,0 +1,12 @@
+#Deny from all
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond $1 !^(index.php|public|robots.txt) 
+    RewriteRule ^(.*)$ /ci-app-mo/index.php?/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /ci-app-no/index.php
+</IfModule>
