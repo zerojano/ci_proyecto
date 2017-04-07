@@ -15,18 +15,20 @@ class Model_log_access extends CI_Model {
 	function __construct() {
 		parent::__construct();
 		}
-	function all($user){
-		$this->db->select('log_access.id, log_access.fecha, user.firstname, user.lastname');
+	function all($user, $order){
+		$this->db->select('log_access.id, log_access.create_date, users.name, users.apellidos');
 		$this->db->from('log_access');
-		$this->db->join('user', 'user.id = '.$user );
-		$this->db->order_by('log_access.id','DESC');
+		$this->db->join('users', 'users.user_id = '.$user );
+		$this->db->order_by('log_access.id', $order);
 		$this->db->limit(15, 20);
 		$query = $this->db->get();
 		return $query->result();
 	}
-	function find($id){
-		$this->db->where('id', $id);
-		return $this->db->get('user')->row();
+	function find($id, $order){
+		$this->db->where('user_id', $id);
+		$this->db->order_by('id', $order);
+		$this->db->limit(1,1);
+		return $this->db->get('log_access')->row();
 	}
     function insert_access($user_id,$ip,$agent, $browser, $platform){
         $data = array(

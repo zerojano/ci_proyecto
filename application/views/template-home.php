@@ -39,7 +39,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-<?php if ($this->input->ip_address() <> '::1') { ?>      
+<?php if ($this->input->ip_address() <> '146.83.222.25') { ?>      
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
@@ -63,7 +63,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
             <br />
             <?php 
             //if($this->session->userdata('firstname')){
-              if ($this->input->ip_address() <> '::1') {
+              if ($this->input->ip_address() <> '146.83.222.25') {
                 echo menu_ppal(); 
               }
                        
@@ -103,7 +103,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;"> Perfil</a></li>
+                    <li><a href="<?=base_url('perfil/index');?>"> Perfil</a></li>
                     <li>
                       <a href="javascript:;">
                         <span class="badge bg-red pull-right">50%</span>
@@ -123,7 +123,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     <li>
                       <a>
-                        <span class="image"><img src="<?=base_url('public/images/aaguayo.jpg');?>" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=base_url($this->session->userdata('img_avatar'))?>" alt="Profile Image" /></span>
                         <span>
                           <span>Alejandro Aguayo</span>
                           <span class="time">3 min ago</span>
@@ -135,7 +135,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="<?=base_url('public/images/aaguayo.jpg');?>" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=base_url($this->session->userdata('img_avatar'))?>" alt="Profile Image" /></span>
                         <span>
                           <span>Alejandro Aguayo</span>
                           <span class="time">3 min ago</span>
@@ -147,7 +147,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="<?=base_url('public/images/aaguayo.jpg');?>" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=base_url($this->session->userdata('img_avatar'))?>" alt="Profile Image" /></span>
                         <span>
                           <span>Alejandro Aguayo</span>
                           <span class="time">3 min ago</span>
@@ -159,7 +159,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="<?=base_url('public/images/aaguayo.jpg');?>" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=base_url($this->session->userdata('img_avatar'))?>" alt="Profile Image" /></span>
                         <span>
                           <span>Alejandro Aguayo</span>
                           <span class="time">3 min ago</span>
@@ -192,7 +192,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
           ?>
         </div>
         <!-- /page content -->
-<?php if ($this->input->ip_address() <> '::1') { ?>
+<?php if ($this->input->ip_address() <> '146.83.222.25') { ?>  
         <!-- footer content -->
         <footer>
           <div class="pull-right">
