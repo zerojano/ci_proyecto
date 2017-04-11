@@ -42,31 +42,34 @@ class Model_customers extends CI_Model {
     {
         $data = array(
                 'rut' => $rut,
-                'name' => $nombre,
-                'ap_paterno' => $ap_paterno,
-                'ap_materno' => $ap_materno,
-                'direccion' => $direccion,
+                'name' => ucwords(strtolower($nombre)),
+                'ap_paterno' => ucwords(strtolower($ap_paterno)),
+                'ap_materno' => ucwords(strtolower($ap_materno)),
+                'direccion' => ucwords(strtolower($direccion)),
 				'region_id' => $region,
 				'comuna_id' => $comuna,		
 				'ciudad_id' => $ciudad,
 				'activity_type_id' => $actividad,		
 				'phone_f' => $phone_f,
 				'phone_m' => $phone_m,
-				'email' => $email,
+				'email' => strtolower($email),
 				//'user_id' => $user_id,
-				'creado_date' => date('Y-m-d H:i:s'),
+				'create_date' => date('Y-m-d H:i:s'),
 				'edit_date' => date('Y-m-d H:i:s')
                 );
         $this->db->insert('customers',$data);
     }
 	function update($registro) {
 		$data = array( 
-			'nombre' => $registro['nombre'],
-			'apellido' => $registro['apellido'],
-			'telefono' => $registro['telefono'],
-			'direccion' => $registro['direccion'],
+			'name' => ucwords(strtolower($registro['nombre'])),
+			'ap_paterno' => ucwords(strtolower($registro['ap_paterno'])),
+			'ap_materno' => $registro['ap_materno'],
+			'phone_f' => $registro['phone_f'],
+			'phone_m' => $registro['phone_m'],
+			'direccion' => ucwords(strtolower($registro['direccion'])),
 			'cargo' => $registro['cargo'],
-			'perfil' => $registro['tipo']
+			'perfil' => $registro['tipo'],
+			'edit_date' => date('Y-m-d H:i:s')
 			);
 		$this->db->where('id', $registro['id']);
 		$this->db->update('customers', $data);

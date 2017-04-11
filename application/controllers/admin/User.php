@@ -6,6 +6,7 @@ class User extends CI_Controller {
 		parent::__construct();
 		//Cargando modelos
 		$this->load->model('Model_user');
+		$this->load->model('Model_users_activation');
 		//$this->load->model('model_config_alertas_mail');
 		//$this->load->model('model_log_tools');
 		//$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
@@ -52,7 +53,33 @@ class User extends CI_Controller {
 		}
 	}
 	public function insert(){
-		
+		$registro = $this->input->post();
+		$this->form_validation->set_rules('rut', '"Rut"', 'trim|required');
+		$this->form_validation->set_rules('username', '"Usuario"', 'trim|required');
+		$this->form_validation->set_rules('name', '"Nombre"', 'trim|required');
+		$this->form_validation->set_rules('apellidos', '"Apellidos"', 'required');
+		$this->form_validation->set_rules('email', '"E-mail"', 'required|valid_email');
+        if ($this->form_validation->run() == FALSE){
+            $this->create();
+        }
+        else{
+
+        	$code = md5(date('Y-m-d H:i:s'));
+
+        	$this->Model_user->insert($registro);
+
+         	$this->Model_users_activation->insert( $this->db->insert_id(), $code );
+
+        	$this->email($registro['email'], $code);
+
+			$this->session->set_flashdata('msg_tipo', 'success');
+			$this->session->set_flashdata('msg_titulo', '¡Modificación exitosa!');
+			$this->session->set_flashdata('msg_texto', 'Has ingresado exitosamente el usuario <strong>'.$registro['nanme'].' '.$registro['apellidos'].'</strong>');
+
+			$this->email();
+
+			redirect('admin/user/view');
+        }		
 	}
 	public function edit($id){
 		//if( $this->session->userdata('id') ){
@@ -79,6 +106,28 @@ class User extends CI_Controller {
 	}
 	public function delete(){
 
+	}
+
+	public function email($email, $code){
+		//$this->load->libreria('email');
+
+		$link = base_url('activation/user/'.$code);
+
+		$config['protocol'] = 'mail';
+		$config['charset'] = "utf-8";
+		$config['mailtype'] = "html";
+		$config['newline'] = "\r\n";
+
+		$this->email->initialize($config);
+
+		$this->email->from('contacto@infoplan.cl', 'Sistema');
+		$this->email->to($email);
+		$this->email->subject('Activación cuenta');
+   
+        $this->email->message('Se ha creado la cuenta<br>Para realizar la activación es necesario completar ultimo paso en el siguiente link<br><a href="'.$link.'">'.$link.'</a>');
+					
+
+        $this->email->send();
 	}
 }
 

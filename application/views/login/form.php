@@ -2,7 +2,7 @@
         <div class="animate form login_form">
           <section class="login_content">
             <?= form_open('login/valid'); ?>
-              <h1>Login</h1>
+              <h1><?=$title_form;?></h1>
               <div>
 				        <?= form_input(array('type'=>'text', 'name'=>'login', 'id'=>'login','class'=>'form-control', 'placeholder' => 'Usuario', 'value'=>set_value('login')));?>
               </div>
@@ -26,7 +26,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-paw"></i> Ci APP Nomade</h1>
+                  <h1><i class="fa fa-paw"></i> <?=$factory->name_corto;?></h1>
                   <p>©2017 <a href="http://www.Infoplan.cl">www.Infoplan.cl</a> - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a></p>
                 </div>
               </div>
@@ -38,7 +38,7 @@
         <div id="register" class="animate form registration_form">
           <section class="login_content">
             <form>
-              <h1>Recuperar contraseña</h1>
+              <h1><?=$title_form_reset;?></h1>
               <div>
                 <input type="text" class="form-control" placeholder="Username" required="" />
               </div>
@@ -63,7 +63,7 @@
                 <br />
 
                 <div>
-                  <h1><i class="fa fa-paw"></i> Example!</h1>
+                  <h1><i class="fa fa-paw"></i> <?=$factory->name_corto;?></h1>
                   <p>©2017 <a href="http://www.Infoplan.cl">www.Infoplan.cl</a> - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a></p>
                 </div>
               </div>

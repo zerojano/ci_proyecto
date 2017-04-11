@@ -24,28 +24,34 @@ class Model_user extends CI_Model {
 	        return $row->email;
 		}
 	}
+	function update_password_activation( $user_id, $new_pass ){
+		$data = array( 'password' => md5( $new_pass ) );
+		$this->db->where('id', $user_id );
+		$this->db->update('users', $data);	
+	}
 	function get_login($username, $pass) {
 		$this->db->where('username', $username);
 		$this->db->where('password', md5 ( $pass ));
 		$this->db->where('status = 1');
 		return $this->db->get('users');
 	}	
-    function insert($rut, $nombres, $apellidos, $email, $telefono, $direccion, $clave, $tipo, $cargo)
+    function insert($registro)
     {
         $data = array(
-                'rut' => $rut,
-                'name' => $nombres,
-                'apellido' => $apellidos,
-				'email' => $email,
-				'telefono' => $telefono,
-				'direccion' => $direccion,
-				'password' => md5($clave),
-				'creado_fecha' => date('Y-m-d H:i:s'),
-				'img' => 'default/user_1.png',
-				'perfil' => $tipo,
-				'cargo' => $cargo
+                'rut' => $registro['rut'],
+                'name' => ucwords(strtolower($registro['name'])),
+                'apellidos' => ucwords(strtolower($registro['apellidos'])),
+				'email' => strtolower($registro['email']),
+				'username' => strtolower($registro['username']),
+				'password' => md5(date('Y-m-d H:i:s'));
+				//Por defecto
+				'user_type' => 1,
+				'status' => 0,
+				'img_avatar' => '_files/user/type/root.png',
+				'create_date' => date('Y-m-d H:i:s'),
+				'edit_date' => date('Y-m-d H:i:s')
                 );
-        $this->db->insert('info_usuarios',$data);
+        $this->db->insert('users',$data);
     }
 	function verifica_rut($rut) {
         $this->db->where('rut',$rut);
@@ -58,10 +64,9 @@ class Model_user extends CI_Model {
     }
 	function update($registro) {
 		$data = array( 
-			'nombre' => $registro['nombre'],
-			'apellido' => $registro['apellido'],
-			'telefono' => $registro['telefono'],
-			'direccion' => $registro['direccion'],
+			'name' => ucwords(strtolower($registro['name']),
+			'apellidos' => ucwords(strtolower($registro['apellidos']),
+			'email' => ucwords(strtolower($registro['email']),
 			'cargo' => $registro['cargo'],
 			'perfil' => $registro['tipo']
 			);

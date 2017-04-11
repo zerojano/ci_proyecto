@@ -5,6 +5,7 @@ class Login extends CI_Controller{
 		$this->load->library('usuarioLib');
 		$this->load->library('user_agent');
 		$this->load->model('Model_user');
+		$this->load->model('Model_factory');
 		$this->load->model('Model_log_access');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 		$this->form_validation->set_message('loginok', 'Usuario o contraseña incorrecta.');
@@ -14,18 +15,11 @@ class Login extends CI_Controller{
 	public function index(){
 		$data['contenido'] = 'login/form';
 		$data['titulo'] = 'Login';
+		$data['title_form'] = 'Login';
+		$data['title_form_reset'] = 'Recuperar contraseña';
+		$data['factory'] = $this->Model_factory->find(1);
 		$this->load->view('template-login', $data);
 	}
-	/*public function acerca_de(){
-		if( $this->session->userdata('nombre')){
-			$data['contenido'] = 'home/acerca_de';
-			$data['titulo'] = 'Acerca De';
-			$this->load->view('template', $data);
-		}
-		else{
-			redirect ('home/ingreso');
-		}
-	}*/
 	/*public function acceso_denegado(){
 		$data['contenido'] = 'home/acceso_denegado';
 		$data['titulo'] = 'Acceso denegado';
@@ -50,12 +44,11 @@ class Login extends CI_Controller{
 			$this->load->view('template-login', $data);
 		}
 	}
-
 	public function valid(){	 
 		$this->form_validation->set_rules('login', 'Usuario', 'required|callback_loginok');
 		$this->form_validation->set_rules('password', 'Clave', 'required');
 		if($this->form_validation->run() == FALSE){
-			$this->ingreso();
+			$this->index();
 		}
 		else{
 			$user_id = $this->session->userdata('id');
