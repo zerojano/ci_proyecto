@@ -37,7 +37,7 @@
   $ap_mat = array('maxlength' => '100', 'name' => 'ap_materno', 'id' => 'ap_materno', 'class' => 'form-control', 'placeholder' => 'Ingresar apellido', 'value' => set_value('ap_materno') ); 
   $direccion = array('maxlength' => '50', 'name'  => 'direccion', 'id' => 'direccion', 'class' => 'form-control', 'placeholder' => 'Ingresar dirección', 'value' => set_value('direccion') ); 
   $phone_f = array('maxlength' => '9', 'name' => 'phone_f', 'id' => 'phone_f', 'class' => 'form-control', 'placeholder' => '632202155', 'value' => set_value('phone_f') ); 
-  $phone_m = array('maxlength' => '9', 'name' => 'phone_m', 'id' => 'phone_m', 'class' => 'form-control', 'placeholder' => '915309157', 'value' => set_value('telefono') ); 
+  $phone_m = array('maxlength' => '9', 'name' => 'phone_m', 'id' => 'phone_m', 'class' => 'form-control', 'placeholder' => '915309157', 'value' => set_value('phone_m') ); 
   $email = array('maxlength' => '100', 'type' => 'email', 'name'  => 'email', 'id' => 'email', 'class' => 'form-control', 'placeholder' => 'Ingresar e-mail cliente', 'value' => set_value('email') ); 
   $options = array('0' => 'Seleccionar ciudad'); 
   $options1 = array('0' => 'Seleccionar comuna'); 
@@ -83,6 +83,9 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                    <?= my_msj_alert($this->session->flashdata('msg_tipo'), $this->session->flashdata('msg_titulo'), $this->session->flashdata('msg_texto'));
+                    ?>         
+                    <?= my_validation_errors(validation_errors()); ?>     
                     <br />
                     <?= form_open_multipart('admin/customer/insert', array("class"=>"form-horizontal form-label-left","id"=>"demo-form2","data-parsley-validate")); ?>
                       <div class="form-group">

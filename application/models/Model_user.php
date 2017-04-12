@@ -43,7 +43,7 @@ class Model_user extends CI_Model {
                 'apellidos' => ucwords(strtolower($registro['apellidos'])),
 				'email' => strtolower($registro['email']),
 				'username' => strtolower($registro['username']),
-				'password' => md5(date('Y-m-d H:i:s'));
+				'password' => md5(date('Y-m-d H:i:s')),
 				//Por defecto
 				'user_type' => 1,
 				'status' => 0,
@@ -64,9 +64,9 @@ class Model_user extends CI_Model {
     }
 	function update($registro) {
 		$data = array( 
-			'name' => ucwords(strtolower($registro['name']),
-			'apellidos' => ucwords(strtolower($registro['apellidos']),
-			'email' => ucwords(strtolower($registro['email']),
+			'name' => ucwords(strtolower($registro['name'])),
+			'apellidos' => ucwords(strtolower($registro['apellidos'])),
+			'email' => ucwords(strtolower($registro['email'])),
 			'cargo' => $registro['cargo'],
 			'perfil' => $registro['tipo']
 			);

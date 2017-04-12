@@ -13,7 +13,7 @@ class Model_config_comunas extends CI_Model {
 		$this->db->where('id', $id);
 		return $this->db->get('conf_ubi_comuna')->row();
 	}
-	function get_dropdown_list_regiones(){
+	function get_dropdown_list_comuna(){
 		$this->db->from('conf_ubi_comuna');
 		$this->db->order_by('id');
 		$result = $this->db->get();

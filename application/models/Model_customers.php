@@ -1,30 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * 
-CREATE TABLE `customers` (
-  `id` int(11) NOT NULL,
-  `rut` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `ap_paterno` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `ap_materno` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `direccion` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `region_id` int(2) NOT NULL,
-  `comuna_id` int(2) NOT NULL,
-  `ciudad_id` int(2) NOT NULL,
-  `activity_type_id` int(2) NOT NULL,
-  `phone_f` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
-  `phone_m` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(2) NOT NULL,
-  `create_date` datetime NOT NULL,
-  `edit_date` datetime NOT NULL
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
- */
-
 class Model_customers extends CI_Model {
 	function __construct() {
 		parent::__construct();
@@ -53,7 +29,7 @@ class Model_customers extends CI_Model {
 				'phone_f' => $phone_f,
 				'phone_m' => $phone_m,
 				'email' => strtolower($email),
-				//'user_id' => $user_id,
+				'user_id' => 1,
 				'create_date' => date('Y-m-d H:i:s'),
 				'edit_date' => date('Y-m-d H:i:s')
                 );
@@ -75,6 +51,15 @@ class Model_customers extends CI_Model {
 		$this->db->where('id', $registro['id']);
 		$this->db->update('customers', $data);
 	}
+	function verifica_rut($rut) {
+        $this->db->where('rut',$rut);
+        $query = $this->db->get('customers');
+		if($query->num_rows() == 1)
+		{
+	        $row = $query->row();
+	        return $row->rut;
+		}
+    }
 }
 
 /* End of file Model_user.php */
