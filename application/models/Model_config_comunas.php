@@ -25,4 +25,13 @@ class Model_config_comunas extends CI_Model {
 		}
 		return $return;
 	}
+	function get_dropdown_list_comuna_ajax($ciudad_id){
+		/*$this->db->where('region_id', $region_id);
+		return $this->db->get('conf_ubi_ciudad')->row();*/
+		$this->db->select('id,name');  
+		$this->db->from('conf_ubi_comuna');  
+		$this->db->where('ciudad_id',$ciudad_id);  
+		$query = $this->db->get();  
+		return $query->result();  
+	}
 }

@@ -18,6 +18,7 @@ class Model_config_regiones extends CI_Model {
 		$this->db->order_by('id');
 		$result = $this->db->get();
 		$return = array();
+		$return[0] = 'Seleccionar región';
 		if($result->num_rows() > 0){
 			foreach($result->result_array() as $row){
 				$return[$row['id']] = $row['name'];

@@ -1,3 +1,4 @@
+<?=my_msj_alert($this->session->flashdata('msg_tipo'), $this->session->flashdata('msg_titulo'), $this->session->flashdata('msg_texto'));?>
           <div class="">
             <div class="page-title">
               <div class="title_left">

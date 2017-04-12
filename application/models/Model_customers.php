@@ -38,18 +38,18 @@ class Model_customers extends CI_Model {
 		$this->db->where('id', $id);
 		return $this->db->get('customers')->row();
 	}
-    function insert($rut, $nombre, $ap_paterno, $ap_materno, $direccion, $region, $comuna, $ciudad, $actividad, $phone_f, $phone_m, $email)
+    function insert($rut, $name, $ap_paterno, $ap_materno, $direccion, $region, $comuna, $ciudad, $actividad, $phone_f, $phone_m, $email)
     {
         $data = array(
                 'rut' => $rut,
-                'name' => ucwords(strtolower($nombre)),
+                'name' => ucwords(strtolower($name)),
                 'ap_paterno' => ucwords(strtolower($ap_paterno)),
                 'ap_materno' => ucwords(strtolower($ap_materno)),
                 'direccion' => ucwords(strtolower($direccion)),
 				'region_id' => $region,
-				'comuna_id' => $comuna,		
+				'comuna_id' => $comuna,
 				'ciudad_id' => $ciudad,
-				'activity_type_id' => $actividad,		
+				'activity_type_id' => $actividad,
 				'phone_f' => $phone_f,
 				'phone_m' => $phone_m,
 				'email' => strtolower($email),
@@ -61,7 +61,7 @@ class Model_customers extends CI_Model {
     }
 	function update($registro) {
 		$data = array( 
-			'name' => ucwords(strtolower($registro['nombre'])),
+			'name' => ucwords(strtolower($registro['name'])),
 			'ap_paterno' => ucwords(strtolower($registro['ap_paterno'])),
 			'ap_materno' => $registro['ap_materno'],
 			'phone_f' => $registro['phone_f'],
@@ -69,6 +69,7 @@ class Model_customers extends CI_Model {
 			'direccion' => ucwords(strtolower($registro['direccion'])),
 			'cargo' => $registro['cargo'],
 			'perfil' => $registro['tipo'],
+			'create_date' => date('Y-m-d H:i:s'),
 			'edit_date' => date('Y-m-d H:i:s')
 			);
 		$this->db->where('id', $registro['id']);
