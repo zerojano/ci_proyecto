@@ -17,16 +17,24 @@ class Car extends CI_Controller {
 	}
 	public function view()
 	{
-		//if( $this->session->userdata('id') ){
+		if( $this->session->userdata('id') ){
 			$data['title_ppal'] = 'Administración de stock';
 			$data['title_subt'] = 'registro';
 			$data['title_btn'] = 'Nuevo vehículo';
 			$data['contenido'] = 'admin/car/view';
-			$data['cars'] = $this->Model_car->all('ASC');
+
+			/*Inicializand var query*/
+			$fields = '*';
+			$where = array();
+			$order_by = 'id ASC';
+			$limit = 0;
+
+			$data['cars'] = $this->Model_customers->get_all( $fields, $where, $order_by, $limit );
+
 			$this->load->view('template-home',$data);
-		//}else{
-		//	redirect('login');
-		//}
+		}else{
+			redirect('login');
+		}
 	}
 
 }

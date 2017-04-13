@@ -1,21 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Model_config_provincias extends CI_Model {
+
+	/**
+	 * Inicializar variable con nombre de la tabla
+	 * Inicializar primary_key de la tabla
+	 */
+	protected $table_name = 'conf_ubi_ciudad';
+	protected $primary_key = 'id';
+
 	function __construct() {
 		parent::__construct();
 		}
 	function all() {
-		$this->db->order_by("id", "desc"); 
-		$query = $this->db->get('conf_ubi_ciudad');
+		$this->db->order_by($this->primary_key, "desc"); 
+		$query = $this->db->get($this->table_name);
 		return $query->result();
 	}
 	function find($id) {
-		$this->db->where('id', $id);
-		return $this->db->get('conf_ubi_ciudad')->row();
+		$this->db->where($this->primary_key, $id);
+		return $this->db->get($this->table_name)->row();
 	}
 	function get_dropdown_list_ciudad(){
-		$this->db->from('conf_ubi_ciudad');
-		$this->db->order_by('id');
+		$this->db->from($this->table_name);
+		$this->db->order_by($this->primary_key);
 		$result = $this->db->get();
 		$return = array();
 		if($result->num_rows() > 0){
@@ -27,9 +35,9 @@ class Model_config_provincias extends CI_Model {
 	}
 	function get_dropdown_list_ciudad_ajax($region_id){
 		/*$this->db->where('region_id', $region_id);
-		return $this->db->get('conf_ubi_ciudad')->row();*/
+		return $this->db->get($this->table_name)->row();*/
 		$this->db->select('id,name');  
-		$this->db->from('conf_ubi_ciudad');  
+		$this->db->from($this->table_name);  
 		$this->db->where('region_id',$region_id);  
 		$query = $this->db->get();  
 		return $query->result();  

@@ -2,22 +2,25 @@
 
 class Model_user extends CI_Model {
  
+	protected $table_name = 'users';
+	protected $primary_key = 'id';
+
 	function __construct() {
 		parent::__construct();
 		}
 	 
 	function all($order) {
 		$this->db->order_by("id", $order); 
-		$query = $this->db->get('users');
-		return $query->result();
+		$query = $this->db->get($table_name);
+		return $query->result( $this->table_name );
 	}
 	function find($id) {
 		$this->db->where('id', $id);
-		return $this->db->get('users')->row();
+		return $this->db->get($this->table_name)->row();
 	}
 	function find_email($email) {
         $this->db->where('email',$email);
-        $query = $this->db->get('users');
+        $query = $this->db->get($this->table_name);
 		if($query->num_rows() == 1)
 		{
 	        $row = $query->row();
@@ -26,14 +29,14 @@ class Model_user extends CI_Model {
 	}
 	function update_password_activation( $user_id, $new_pass ){
 		$data = array( 'password' => md5( $new_pass ) );
-		$this->db->where('id', $user_id );
-		$this->db->update('users', $data);	
+		$this->db->where($this->primary_key, $user_id );
+		$this->db->update($this->table_name, $data);	
 	}
 	function get_login($username, $pass) {
 		$this->db->where('username', $username);
 		$this->db->where('password', md5 ( $pass ));
 		$this->db->where('status = 1');
-		return $this->db->get('users');
+		return $this->db->get($this->table_name);
 	}	
     function insert($registro)
     {
@@ -51,11 +54,11 @@ class Model_user extends CI_Model {
 				'create_date' => date('Y-m-d H:i:s'),
 				'edit_date' => date('Y-m-d H:i:s')
                 );
-        $this->db->insert('users',$data);
+        $this->db->insert($this->table_name,$data);
     }
 	function verifica_rut($rut) {
         $this->db->where('rut',$rut);
-        $query = $this->db->get('info_usuarios');
+        $query = $this->db->get($this->table_name);
 		if($query->num_rows() == 1)
 		{
 	        $row = $query->row();
@@ -70,8 +73,8 @@ class Model_user extends CI_Model {
 			'cargo' => $registro['cargo'],
 			'perfil' => $registro['tipo']
 			);
-		$this->db->where('id', $registro['id']);
-		$this->db->update('info_usuarios', $data);
+		$this->db->where($this->primary_key, $registro['id']);
+		$this->db->update($this->table_name, $data);
 	}
 	function update_perfil($registro) {
 		$data = array( 
@@ -81,12 +84,12 @@ class Model_user extends CI_Model {
 			'direccion' => ucfirst(strtolower($registro['direccion'])),
 			'cargo' => ucfirst(strtolower($registro['cargo']))
 			);
-		$this->db->where('id', $this->session->userdata('id'));
-		$this->db->update('info_usuarios', $data);
+		$this->db->where($this->primary_key, $this->session->userdata('id'));
+		$this->db->update($this->table_name, $data);
 	}     
 	function delete($id) {
-		$this->db->where('id', $id);
-		$this->db->delete('info_usuarios');
+		$this->db->where($this->primary_key, $id);
+		$this->db->delete($this->table_name);
 	} 
 	function estado($usuario,$estado) {
 		if ($estado == 1) {
@@ -95,12 +98,12 @@ class Model_user extends CI_Model {
 			$estado = 1;
 		}
 		$this->db->set('estado',$estado);
-		$this->db->where('id', $usuario);
-		$this->db->update('info_usuarios');
+		$this->db->where($this->primary_key, $usuario);
+		$this->db->update($this->table_name);
 	}
     function verifica_email($email) {
         $this->db->where('email',$email);
-        $consulta = $this->db->get('info_usuarios');
+        $consulta = $this->db->get($this->table_name);
 		if($consulta->num_rows() == 1)
 		{
 	        $row = $consulta->row();
@@ -110,13 +113,13 @@ class Model_user extends CI_Model {
 	function find_user( $email )
 	{
 		$this->db->where('email', $email);
-		return $this->db->get('info_usuarios')->row();
+		return $this->db->get($this->table_name)->row();
 	}
 	function get_password( $password ) {
 
-		$this->db->where('id', $this->session->userdata('id') );
+		$this->db->where($this->primary_key, $this->session->userdata('id') );
         $this->db->where('password',md5($password));
-        $query = $this->db->get('info_usuarios');
+        $query = $this->db->get($this->table_name);
 		if($query->num_rows() == 1)
 		{
 	        $row = $query->row();
@@ -133,15 +136,15 @@ class Model_user extends CI_Model {
     function update_pass( $usuario, $clavenueva ){
 		$data = array( 'password' => $clavenueva );
 		$this->db->where('id', $usuario );
-		$this->db->update('info_usuarios', $data);
+		$this->db->update($this->table_name, $data);
     }
     function get_count_all($operador, $tipo){
 		$this->db->where('estado'.$operador,$tipo);
-		return $this->db->count_all_results('info_usuarios'); 
+		return $this->db->count_all_results($this->table_name); 
     }
     function update_img( $imagen ){
 		$data = array( 'img' => $imagen );
-		$this->db->where('id', $this->session->userdata('id') );
-		$this->db->update('info_usuarios', $data);
+		$this->db->where($this->primary_key, $this->session->userdata('id') );
+		$this->db->update($this->table_name, $data);
     }    
 }

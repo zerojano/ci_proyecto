@@ -7,8 +7,6 @@ class Brand extends CI_Controller {
 		parent::__construct();
 		//Cargando modelos
 		$this->load->model('Model_cars_brand');
-		//$this->load->model('model_config_alertas_mail');
-		//$this->load->model('model_log_tools');
 		//$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 	}
 	public function index()
@@ -18,19 +16,32 @@ class Brand extends CI_Controller {
 	}
 	public function view()
 	{
-		//if( $this->session->userdata('id') ){
+		if( $this->session->userdata('id') ){
 			$data['title'] = '<h3>Administración modelos autos <small>registro</small> </h3>';
-			$data['migajas'] = '<li><a href="#"><i class="fa fa-dashboard">
-					</i> Administración</a></li>
-		            <li class="active">Usuarios</li>
-		            <li class="#">Todos</li>';
 			$data['contenido'] = 'admin/cars/brand/view';
-			$data['type'] = $this->Model_cars_brand->all('ACS');
+
+			/*Inicializand var query*/
+			$fields = '*';
+			$where = array();
+			$order_by = 'id ASC';
+			$limit = 0;
+
+			$data['type'] = $this->Model_cars_brand->get_all( $fields, $where, $order_by, $limit );
+
 			$this->load->view('template-home',$data);
-		//}else{
-		//	redirect('login');
-		//}
+		}else{
+			redirect('login');
+		}
 	}
+	public function insert(){}
+
+	public function create(){}
+	
+	public function edit(){}
+	
+	public function update(){}
+	
+	public function delete(){}
 }
 
 /* End of file Brand.php */

@@ -55,11 +55,11 @@
                       </thead>
                       <tbody>
       			            <?php
-      			              foreach ( $user as $query ) { 
+      			              foreach ( $customers as $query ) { 
       			            ?>
                         <tr>
                           <td><?php echo $query->id;  ?></td>
-                          <td><?php echo $query->rut;  ?></td>
+                          <td><?php echo my_rut_formato($query->rut);  ?></td>
                           <td><?php echo $query->name;  ?></td>
                           <td><?php echo $query->ap_paterno;  ?></td>                          
                           <td><?php echo $query->email;  ?></td>
@@ -75,7 +75,7 @@
                     </table>
                   </div>
                     <div class="form-group">
-                      <?=anchor('admin/customers/create','<i class="glyphicon glyphicon-edit"></i> '.$title_btn_submit,array('class' => 'btn btn-success','title' => $title_btn_submit));?> 
+                      <?=anchor('admin/customers/create','<i class="glyphicon glyphicon-edit"></i> '.$title_btn_add,array('class' => 'btn btn-success','title' => $title_btn_add));?> 
                     </div>                  
                 </div>
               </div>

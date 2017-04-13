@@ -19,12 +19,31 @@ class Customers extends CI_Controller {
 	public function view()
 	{
 		//if( $this->session->userdata('id') ){
-			$data['title'] = '<h3>Administración de clientes <small>registro</small> </h3>';
-			$data['title_ppal'] = 'Administración de clientes ';
-			$data['title_subt'] = 'registro';
+			if (ENVIRONMENT == 'development') {
+				$data['title_ppal'] = '';
+				$data['title_subt'] = '';
+				$data['title_form'] = '';
+				$data['title_btn_add'] = '';
+				$theme = 'template-desarrollo';
+			}else{
+				$data['title_ppal'] = 'Nuevo cliente';
+				$data['title_subt'] = 'registro';
+				$data['title_form'] = 'Ingresar nuevo cliente';
+				$data['title_btn_add'] = 'Nuevo cliente';
+				$theme = 'template-home';				
+			}
+
 			$data['contenido'] = 'admin/customers/view';
-			$data['user'] = $this->Model_customers->all();
-			$this->load->view('template-desarrollo',$data);
+
+			/*Inicializand var query*/
+			$fields = '*';
+			$where = array();
+			$order_by = 'id DESC';
+			$limit = 0;
+
+			$data['customers'] = $this->Model_customers->get_all( $fields, $where, $order_by, $limit );
+
+			$this->load->view($theme,$data);
 		//}else{
 		//	redirect('login');
 		//}
@@ -41,7 +60,7 @@ class Customers extends CI_Controller {
 				$data['dropdown_list_ciudad'] = $this->Model_config_provincias->get_dropdown_list_ciudad();
 				$data['dropdown_list_activity'] = $this->Model_customers_activity->get_dropdown_list_activity();
 				$data['contenido'] = 'admin/customers/create';
-				$this->load->view('template-desarrollo', $data);
+				$this->load->view('template-home', $data);
 			//}else{
 			//	$this->session->set_flashdata('msg_tipo', 'warning');
 			//	$this->session->set_flashdata('msg_titulo', '¡ACCESO DENEGADO!');
@@ -82,7 +101,7 @@ class Customers extends CI_Controller {
             $this->create();
         }
         else{
-        	    	//echo 'dato: '.$rut;exit;
+			//echo 'dato: '.$rut;exit;
         	$this->Model_customers->insert($rut, $name, $ap_paterno, $ap_materno, $direccion, $region, $comuna, $ciudad, $actividad, $phone_f, $phone_m, $email);
 			$this->session->set_flashdata('msg_tipo', 'success');
 			$this->session->set_flashdata('msg_titulo', '¡Modificación exitosa!');
@@ -91,27 +110,74 @@ class Customers extends CI_Controller {
         }			
 	}
 	public function edit($id){
-		if( $this->session->userdata('id') ){
+		//if( $this->session->userdata('id') ){
 			//if ( get_instance()->session->userdata('perfil') == 1 ) {
+			if (ENVIRONMENT == 'development') {
+				$data['title_ppal'] = '';
+				$data['title_subt'] = '';
+				$data['title_form'] = '';
+				$data['title_form_subt'] = '';
+				$data['btn_submit'] = 'enviar';
+				$theme = 'template-desarrollo';
+			}else{
 				$data['title_ppal'] = 'Modificar cliente';
 				$data['title_subt'] = 'registro';
 				$data['title_form'] = 'Modificar cliente';
 				$data['title_form_subt'] = 'Modificación de cliente';
 				$data['btn_submit'] = 'Modificar cliente';
-				$data['customer'] = $this->Model_customers->find($id);
+				$theme = 'template-home';
+			}
+				$data['customers'] = $this->Model_customers->get($id);
 				$data['dropdown_list_region'] = $this->Model_config_regiones->get_dropdown_list_regiones();
 				$data['dropdown_list_ciudad'] = $this->Model_config_provincias->get_dropdown_list_ciudad();
 				$data['dropdown_list_comuna'] = $this->Model_config_comunas->get_dropdown_list_comuna();
 				$data['dropdown_list_activity'] = $this->Model_customers_activity->get_dropdown_list_activity();
 				$data['contenido'] = 'admin/customers/edit';
-				$this->load->view('template-desarrollo', $data);
+				//$this->load->view('template-home', $data); 
+				$this->load->view($theme, $data);
 			//}else{
-		}else{
-			redirect('login');
-		}		
+		//}else{
+		//	redirect('login');
+		//}		
 	}
 	public function update(){
 
+		$registro = $this->input->post();
+		$registro = $this->security->xss_clean($registro);
+
+		$this->form_validation->set_rules('rut', '"Rut"', 'trim|required|callback_rut_validar');//|callback_rut_validar|callback_rut_check');
+		$this->form_validation->set_rules('name', '"Nombre"', 'trim|required');
+		$this->form_validation->set_rules('ap_paterno', '"Apellido Paterno"', 'trim|required');
+		$this->form_validation->set_rules('ap_materno', '"Apellido Materno"', 'trim|required');
+		$this->form_validation->set_rules('direccion', '"Dirección"', 'trim');
+		$this->form_validation->set_rules('phone_f', '"Teléfono fijo"', 'trim');
+		$this->form_validation->set_rules('phone_m', '"Teléfono movil"', 'trim');
+		$this->form_validation->set_rules('email', '"E-mail"', 'required|valid_email');
+		
+		$rut = $this->input->post('rut');
+		$name = $this->input->post('name',TRUE);
+		$ap_paterno = $this->input->post('ap_paterno',TRUE);
+		$ap_materno = $this->input->post('ap_materno',TRUE);
+		$direccion = $this->input->post('direccion',TRUE);
+		$phone_f = $this->input->post('phone_f',TRUE);
+		$phone_m = $this->input->post('phone_m',TRUE);
+		$email = $this->input->post('email',TRUE);
+		$actividad = $this->input->post('actividad',TRUE);
+		$region = $this->input->post('region',TRUE);
+		$comuna = $this->input->post('comuna',TRUE);
+		$ciudad = $this->input->post('ciudad',TRUE);
+
+		if($this->form_validation->run() == FALSE){
+			$this->edit($registro['id']);
+		}
+		else{
+			$this->Model_customers->update($rut, $name, $ap_paterno, $ap_materno, $direccion, $region, $comuna, $ciudad, $actividad, $phone_f, $phone_m, $email);
+			$this->session->set_flashdata('msg_tipo', 'success');
+			$this->session->set_flashdata('msg_titulo', '¡Modificación exitosa!');
+			$this->session->set_flashdata('msg_texto', 'Has modificado la categoría <strong>'.$nombre.'</strong>');
+
+			redirect('admin/customers/view');
+		}
 	}
 	public function delete(){
 

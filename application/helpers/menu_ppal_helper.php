@@ -14,7 +14,7 @@ if ( ! function_exists('my_validation_errors')){
 if ( ! function_exists('menu_ppal')){
 	function menu_ppal(){
 		$CI =& get_instance();
-		//if (get_instance()->session->userdata('id')) {
+		if (get_instance()->session->userdata('id')) {
 			$name_nav_ppal = 'General';
 			$name_nav_ppal_admin = 'Administración';
             /*menu_general*/
@@ -26,7 +26,7 @@ if ( ! function_exists('menu_ppal')){
 			$opciones .= '<li><a><i class="fa fa-plus-circle"></i> Ingreso <span class="fa fa-chevron-down"></span></a>
                     		<ul class="nav child_menu">
                       			<li><a href="index.html">Clientes</a></li>
-                      			<li><a href="index.html">Requerimientos</a></li>
+                      			<li><a href="admin/users/type/view">Ingresar cotización</a></li>
                     		</ul>                  		
                   		  </li>';
 			$opciones .= '<li><a><i class="fa fa-file-text-o"></i> Seguimiento <span class="fa fa-chevron-down"></span></a>
@@ -101,7 +101,7 @@ if ( ! function_exists('menu_ppal')){
 			}*/
 		//}else{
 		//	$opciones = $opciones.'<li>'.anchor('login/ingreso', 'Login').'</li>';
-		//}
+		}
 		return $opciones;
 	}
 }

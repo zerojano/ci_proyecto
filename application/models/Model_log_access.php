@@ -1,20 +1,30 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-CREATE TABLE `log_access` (
-  `id` int(5) NOT NULL,
-  `user_id` int(5) NOT NULL,
-  `ip` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-  `agent` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `browser` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `platform` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `create_date` datetime NOT NULL,
-  `edit_date` datetime NOT NULL
-)
-*/
+
 class Model_log_access extends CI_Model {
+
+	/**
+	 * Inicializar variable con nombre de la tabla
+	 * Inicializar primary_key de la tabla
+	 */
+	protected $table_name = 'log_access';
+	protected $primary_key = 'id';
+
 	function __construct() {
 		parent::__construct();
 		}
+	function get($id){
+		return $this->db->get_where($this->table_name, array($this->primary_key => $id))->row();
+	}		
+	function get_all( $fields='', $where, $order_by='', $limit ){
+        if ($fields != '') { $this->db->select($fields); }
+		if (count($where)) { $this->db->where($where); }
+		if ($limit != '') 	{ $this->db->limit($limit); }
+        if ($order_by != '') { $this->db->order_by($order_by); }
+		$query = $this->db->get( $this->table_name );
+		return $query->result();
+	}
+
+	
 	function all($user, $order){
 		$this->db->select('log_access.id, log_access.create_date, users.name, users.apellidos');
 		$this->db->from('log_access');
