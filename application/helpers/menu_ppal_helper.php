@@ -51,7 +51,7 @@ if ( ! function_exists('menu_ppal')){
            $opciones .= '<li><a><i class="fa fa-industry"></i> Empresa <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li>'.anchor('admin/factory/view','Empresa').'</li>
-                      <li>'.anchor('admin/factory/edit','Modificar empres').'</li>
+                      <li>'.anchor('admin/factory/edit','Modificar empresa').'</li>
                     </ul>
                   </li>';
             $opciones .= '<li><a><i class="fa fa-male"></i> Clientes <span class="fa fa-chevron-down"></span></a>
