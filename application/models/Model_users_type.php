@@ -18,7 +18,19 @@ class Model_users_type extends CI_Model {
 		$query = $this->db->get($this->table_name);
 		return $query->result();
 	}	
-
+	function get_dropdown_list_type(){
+		$this->db->from($this->table_name);
+		$this->db->order_by($this->primary_key);
+		$result = $this->db->get();
+		$return = array();
+		$return[0] = 'Seleccionar perfil';
+		if($result->num_rows() > 0){
+			foreach($result->result_array() as $row){
+				$return[$row['id']] = $row['name'];
+			}
+		}
+		return $return;
+	}
 }
 
 /* End of file Model_users_type.php */

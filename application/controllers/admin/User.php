@@ -6,6 +6,10 @@ class User extends CI_Controller {
 		parent::__construct();
 		$this->load->model('Model_user');
 		$this->load->model('Model_users_activation');
+		$this->load->model('Model_config_regiones');
+		$this->load->model('Model_config_comunas');
+		$this->load->model('Model_config_provincias');
+		$this->load->model('Model_users_type');
 		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 	}
 	public function index()
@@ -41,10 +45,17 @@ class User extends CI_Controller {
 	public function create() {
 		if( $this->session->userdata('id') ){
 			//if ( get_instance()->session->userdata('perfil') == 1 ) {
-				$data['title'] = '<h3>Crea usuario <small>registro</small> </h3>';
-				$data['contenido'] = 'admin/user/create';
+				$data['title_ppal'] = 'Crea usuario ';
+				$data['title_subt'] = 'registro';	
 				$data['title-form'] = 'Crear usuario';
-				$data['boton'] = 'Crear usuario';
+				$data['title_btn_submit'] = 'Nuevo usuario';
+
+				$data['contenido'] = 'admin/user/create';
+
+				//$data['dropdown_list_region'] = $this->Model_config_regiones->get_dropdown_list_regiones();
+				//$data['dropdown_list_ciudad'] = $this->Model_config_provincias->get_dropdown_list_ciudad();
+				$data['dropdown_list_type'] = $this->Model_users_type->get_dropdown_list_type();
+
 				$this->load->view('template-home', $data);
 			//}else{
 			//	$this->session->set_flashdata('msg_tipo', 'warning');
@@ -59,21 +70,19 @@ class User extends CI_Controller {
 	public function insert(){
 		$registro = $this->input->post();
 		$this->form_validation->set_rules('rut', '"Rut"', 'trim|required');
-		$this->form_validation->set_rules('username', '"Usuario"', 'trim|required');
+		$this->form_validation->set_rules('username', '"Usuario"', 'trim|required|callback_comprobar_usuario_ajax');
 		$this->form_validation->set_rules('name', '"Nombre"', 'trim|required');
 		$this->form_validation->set_rules('apellidos', '"Apellidos"', 'required');
 		$this->form_validation->set_rules('email', '"E-mail"', 'required|valid_email');
+		$this->form_validation->set_rules('perfil', '"Seleccionar perfil"', 'required');
         if ($this->form_validation->run() == FALSE){
             $this->create();
         }
         else{
 
         	$code = md5(date('Y-m-d H:i:s'));
-
         	$this->Model_user->insert($registro);
-
          	$this->Model_users_activation->insert( $this->db->insert_id(), $code );
-
         	$this->email($registro['email'], $code, $registro['username']);
 
 			$this->session->set_flashdata('msg_tipo', 'success');
@@ -86,7 +95,7 @@ class User extends CI_Controller {
         }		
 	}
 	public function edit($id){
-		//if( $this->session->userdata('id') ){
+		if( $this->session->userdata('id') ){
 			//if ( get_instance()->session->userdata('perfil') == 1 ) {
 				$data['title'] = '<h3>Crea usuario <small>registro</small> </h3>';
 				$data['contenido'] = 'admin/user/edit';
@@ -100,9 +109,9 @@ class User extends CI_Controller {
 			//	$this->session->set_flashdata('msg_texto', 'No cuenta con privilegios para acceder a la sección seleccionada.');
 			//	redirect('home');
 			//}
-		//}else{
-		//	redirect('login');
-		//}		
+		}else{
+			redirect('login');
+		}		
 
 	}
 	public function update(){
@@ -134,6 +143,18 @@ class User extends CI_Controller {
 
         $this->email->send();
 	}
+    public function comprobar_usuario_ajax(){
+        $user = $this->input->post('user');
+        $comprobar_username = $this->Model_user->verifica_user($user);
+        if ($comprobar_username == $user){
+            $this->form_validation->set_message('comprobar_usuario_ajax', 'El %s ya se encuentra registrado');
+            return FALSE;
+        }
+        else{
+            echo '<div style="display:none">1</div>';
+            return TRUE;
+        }
+    }
 }
 
 /* End of file User.php */

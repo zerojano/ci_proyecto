@@ -48,14 +48,22 @@ class Model_user extends CI_Model {
 				'username' => strtolower($registro['username']),
 				'password' => md5(date('Y-m-d H:i:s')),
 				//Por defecto
-				'user_type' => 1,
-				'status' => 0,
+				'user_type' => $registro['perfil'],
+				'status' => 1,
 				'img_avatar' => '_files/user/type/root.png',
 				'create_date' => date('Y-m-d H:i:s'),
 				'edit_date' => date('Y-m-d H:i:s')
                 );
         $this->db->insert($this->table_name,$data);
     }
+    function verifica_user($username){
+        $this->db->where('username',$username);
+        $consulta = $this->db->get($this->table_name);
+		if($consulta->num_rows() == 1){
+	        $row = $consulta->row();
+	        return $row->user;
+		}
+    }    
 	function verifica_rut($rut) {
         $this->db->where('rut',$rut);
         $query = $this->db->get($this->table_name);
