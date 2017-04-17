@@ -17,6 +17,7 @@ if ( ! function_exists('menu_ppal')){
 		if (get_instance()->session->userdata('id')) {
 			$name_nav_ppal = 'General';
 			$name_nav_ppal_admin = 'Administración';
+      $name_nav_ppal_sys_admin = 'SYS ADMIN';
             /*menu_general*/
 			$opciones = '<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">';
 			$opciones .= '<div class="menu_section"><h3>'.$name_nav_ppal.'</h3>';
@@ -67,9 +68,22 @@ if ( ! function_exists('menu_ppal')){
                       <li>'.anchor('admin/cars/brand/view','Marca auto').'</li>
                       <li>'.anchor('admin/cars/type/view','Tipo transporte').'</li>
                     </ul>
-                  </li>';                  
+                  </li>';
             $opciones .= '</ul>
               </div>';
+
+            /*menu SYS ADMIN*/
+            if (get_instance()->session->userdata('user_type') == 1) {
+              $opciones .= '<div class="menu_section"><h3>'.$name_nav_ppal_sys_admin.'</h3>
+                  <ul class="nav side-menu">';
+              $opciones .= '<li><a><i class="fa fa-hand-o-down"></i> SESSIONS <span class="fa fa-chevron-down"></span></a>
+                      <ul class="nav child_menu">
+                        <li>'.anchor('admin/config/resetsession','Quitar sesiones').'</li>
+                      </ul>
+                    </li>';
+              $opciones .= '</ul>
+                </div>';
+            }
 
             $opciones .= '</div>';
 
