@@ -4,12 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class User extends CI_Controller {
 	function __construct(){
 		parent::__construct();
-		//Cargando modelos
 		$this->load->model('Model_user');
 		$this->load->model('Model_users_activation');
-		//$this->load->model('model_config_alertas_mail');
-		//$this->load->model('model_log_tools');
-		//$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
+		$this->form_validation->set_message('required', 'Debe ingresar un valor para %s');
 	}
 	public function index()
 	{
@@ -23,12 +20,19 @@ class User extends CI_Controller {
 	public function view()
 	{
 		if( $this->session->userdata('id') ){
-			/*Configuración titulos*/
 			$data['title_ppal'] = 'Administración de usuarios ';
 			$data['title_subt'] = 'registro';	
 			$data['title_btn_submit'] = 'Nuevo usuario';
 			$data['contenido'] = 'admin/user/view';
-			$data['user'] = $this->Model_user->all('ACS');
+
+			/*Inicializand var query*/
+			$fields = '*';
+			$where = array();
+			$order_by = 'id ASC';
+			$limit = 0;
+
+			$data['user'] = $this->Model_user->get_all( $fields, $where, $order_by, $limit );
+
 			$this->load->view('template-home',$data);
 		}else{
 			redirect('login');
@@ -70,7 +74,7 @@ class User extends CI_Controller {
 
          	$this->Model_users_activation->insert( $this->db->insert_id(), $code );
 
-        	$this->email($registro['email'], $code);
+        	$this->email($registro['email'], $code, $registro['username']);
 
 			$this->session->set_flashdata('msg_tipo', 'success');
 			$this->session->set_flashdata('msg_titulo', '¡Modificación exitosa!');
@@ -104,11 +108,12 @@ class User extends CI_Controller {
 	public function update(){
 
 	}
-	public function delete(){
-
+	public function delete($id) {
+		$this->Model_user->delete($id);
+		redirect('admin/user/view');
 	}
 
-	public function email($email, $code){
+	public function email($email, $code, $username){
 		//$this->load->libreria('email');
 
 		$link = base_url('activation/user/'.$code);
@@ -124,7 +129,7 @@ class User extends CI_Controller {
 		$this->email->to($email);
 		$this->email->subject('Activación cuenta');
    
-        $this->email->message('Se ha creado la cuenta<br>Para realizar la activación es necesario completar ultimo paso en el siguiente link<br><a href="'.$link.'">'.$link.'</a>');
+        $this->email->message('Se ha creado la cuenta '.$username.'<br>Para realizar la activación es necesario completar ultimo paso en el siguiente link<br><a href="'.$link.'">'.$link.'</a>');
 					
 
         $this->email->send();
