@@ -1,4 +1,4 @@
-<?php
+ <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
@@ -24,27 +24,36 @@ class User extends CI_Controller {
 	public function view()
 	{
 		if( $this->session->userdata('id') ){
-			$data['title_ppal'] = 'Administración de usuarios ';
-			$data['title_subt'] = 'registro';	
-			$data['title_btn_submit'] = 'Nuevo usuario';
-			$data['contenido'] = 'admin/user/view';
+			if ($this->session->userdata('user_type') < 3) {
+				$data['title_ppal'] = 'Administración de usuarios ';
+				$data['title_subt'] = 'registro';	
+				$data['title_btn_submit'] = 'Nuevo usuario';
+				$data['contenido'] = 'admin/user/view';
 
-			/*Inicializand var query*/
-			$fields = '*';
-			$where = array();
-			$order_by = 'id ASC';
-			$limit = 0;
+				/*Inicializand var query*/
+				$fields = '*';
+				$where = array();
+				$order_by = 'id ASC';
+				$limit = 0;
 
-			$data['user'] = $this->Model_user->get_all( $fields, $where, $order_by, $limit );
+				$data['user'] = $this->Model_user->get_all( $fields, $where, $order_by, $limit );
 
-			$this->load->view('template-home',$data);
+				$this->load->view('template-home',$data);
+			}else{
+				$this->session->set_flashdata('msg_tipo', 'warning');
+				$this->session->set_flashdata('msg_titulo', '¡ACCESO DENEGADO!');
+				$this->session->set_flashdata('msg_texto', 'No cuenta con privilegios para acceder a la sección seleccionada.');
+				redirect('home');
+			}				
 		}else{
 			redirect('login');
 		}
 	}
 	public function create() {
 		if( $this->session->userdata('id') ){
-			//if ( get_instance()->session->userdata('perfil') == 1 ) {
+
+			if ($this->session->userdata('user_type') < 3) {
+
 				$data['title_ppal'] = 'Crea usuario ';
 				$data['title_subt'] = 'registro';	
 				$data['title-form'] = 'Crear usuario';
@@ -57,12 +66,12 @@ class User extends CI_Controller {
 				$data['dropdown_list_type'] = $this->Model_users_type->get_dropdown_list_type();
 
 				$this->load->view('template-home', $data);
-			//}else{
-			//	$this->session->set_flashdata('msg_tipo', 'warning');
-			//	$this->session->set_flashdata('msg_titulo', '¡ACCESO DENEGADO!');
-			//	$this->session->set_flashdata('msg_texto', 'No cuenta con privilegios para acceder a la sección seleccionada.');
-			//	redirect('home');
-			//}
+			}else{
+				$this->session->set_flashdata('msg_tipo', 'warning');
+				$this->session->set_flashdata('msg_titulo', '¡ACCESO DENEGADO!');
+				$this->session->set_flashdata('msg_texto', 'No cuenta con privilegios para acceder a la sección seleccionada.');
+				redirect('home');
+			}
 		}else{
 			redirect('login');
 		}
