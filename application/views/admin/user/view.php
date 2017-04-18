@@ -45,6 +45,7 @@
                           <th class="hidden-xs">Apellidos</th>
                           <th>Usuario</th>
                           <th>Email</th>
+                          <th>Estatus</th>
                           <th>Opción</th>
                         </tr>
                       </thead>
@@ -57,6 +58,21 @@
                           <td class="hidden-xs"><?php echo $query->apellidos;  ?></td>
                           <td><?php echo $query->username;  ?></td>
                           <td><?php echo $query->email;  ?></td>
+                          <td>
+                              <?php 
+                                switch ($query->users_status_id) {
+                                  case 1:
+                                      echo anchor('admin/user/status/'.$query->id,'<i class="fa fa-user"></i> <span>No activo</span>',array('class' => 'btn btn-warning btn-xs','title' => 'No activo'));
+                                    break;
+                                  case 2:
+                                      echo anchor('admin/user/status/'.$query->id,'<i class="fa fa-user"></i> <span>Activo</span>',array('class' => 'btn btn-success btn-xs','title' => 'Activo'));
+                                    break;                                  
+                                  case 3:
+                                      echo anchor('admin/user/status/'.$query->id,'<i class="fa fa-user"></i> <span>Bloqueado</span>',array('class' => 'btn btn-danger btn-xs','title' => '>Bloqueado'));
+                                    break;
+                                }
+                              ?>
+                          </td>
                           <td>
                        		<?=anchor('admin/user/edit/'.$query->id,'<i class="glyphicon glyphicon-edit"></i> <span class="hidden-xs">Editar</span>',array('class' => 'btn btn-success btn-xs','title' => 'Editar información usuario'));?>
                        		<?=anchor('admin/user/delete/'.$query->id,'<i class="glyphicon glyphicon-trash"></i> <span class="hidden-xs">Quitar</span>',array('class' => 'btn btn-danger btn-xs','title' => 'Quitar usuario'));?>
